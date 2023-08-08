@@ -2,6 +2,7 @@ const UserSchema= require('../../models/UserModel.js')
 const bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
+const sendMail=require('../../sevice/confirmEmail.js')
 
 class AuthControler {
 
@@ -63,6 +64,7 @@ class AuthControler {
             return res.json('Такий юзер є в системі')
         }
         const doc =  new User({role:'user',email,fullname,password:passwordHash})
+        await sendMail(email,doc.id)
         const {password:password1,...userData}  = doc._doc
         
 

@@ -1,5 +1,5 @@
 const express = require('express')
-const nodemailer=require('nodemailer')
+
 const mongoose = require('mongoose');
 const userRouter = require('./routes/Auth/auth.js')
 const productRouter = require('./routes/ProductRouter/ProductRouter.js')
@@ -23,6 +23,7 @@ const storage = multer.diskStorage({
         cb(null,file.originalname)
     }
 })
+
 const fileFilter = (req,file, cb) => {
   
     if(file.mimetype === "image/png" || 
