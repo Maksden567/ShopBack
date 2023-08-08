@@ -3,6 +3,7 @@ const nodemailer=require('nodemailer')
 const mongoose = require('mongoose');
 const userRouter = require('./routes/Auth/auth.js')
 const productRouter = require('./routes/ProductRouter/ProductRouter.js')
+const cartRouter = require('./routes/CartRouter/Cart.js')
 const multer = require('multer')
 
 const app = express()
@@ -11,6 +12,7 @@ mongoose.connect('mongodb+srv://den:Maksden567@cluster0.ui3z7lx.mongodb.net/').t
 app.use(express.json())
 app.use('/auth',userRouter)
 app.use('/',productRouter)
+app.use('/cart',cartRouter)
 
 
 const storage = multer.diskStorage({
