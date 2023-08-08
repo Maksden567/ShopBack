@@ -5,23 +5,24 @@ const mongoose = require('mongoose')
 class ProductControler {
 
     async getProducts(req, res) {
+        const pageOptions = {
+            page: parseInt(req.query.page, 10) || 0,
+            limit: parseInt(req.query.limit, 10) || 10
+        }        
         try {
             const Product = mongoose.model('Product', ProductSchema)
-            const products = await Product.find()
+            const products = await Product.find().skip(pageOptions.limit*pageOptions.page).limit(pageOptions.limit).exec()
             return res.json(products)
         } catch (error) {
             return res.json(error)
         }
-
-
-
     }
 
     async getOneProduct(req, res) {
         try {
             const { id } = req.params
             const Product = mongoose.model('Product', ProductSchema)
-            const product = await Product.findById(id)
+            const product = await Product.findByIdAndUpdate(id,{$inc:{views:1}},{returnDocument:'after'})
             return res.json(product)
         } catch (error) {
             return res.json(error)

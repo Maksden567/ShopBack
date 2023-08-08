@@ -1,4 +1,5 @@
 const express = require('express')
+const nodemailer=require('nodemailer')
 const mongoose = require('mongoose');
 const userRouter = require('./routes/Auth/auth.js')
 const productRouter = require('./routes/ProductRouter/ProductRouter.js')
@@ -31,6 +32,7 @@ const fileFilter = (req,file, cb) => {
         cb(null, false);
     }
  }
+
 
 const upload = multer({storage:storage,fileFilter:fileFilter})
 app.use('/my-uploads',express.static('my-uploads'))
