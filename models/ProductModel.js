@@ -27,7 +27,7 @@ const ProductSchema = new Schema ({
     },
     counterOfOrder:{
         type:Number,
-        default:0
+        default:1
     },
     views:{
         type:Number,
