@@ -64,8 +64,12 @@ class AuthControler {
         }
         const doc =  new User({role:'user',email,fullname,password:passwordHash})
         const {password:password1,...userData}  = doc._doc
+        
+
         await doc.save()
-        return res.json(userData)
+        const token=jwt.sign({id:userData._id},'secretKey12345',{expiresIn:'24h'})
+        await res.setHeader('Autorization', token);
+        return res.json({userData,token})
         
     }
 
