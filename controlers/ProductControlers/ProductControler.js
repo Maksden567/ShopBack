@@ -11,7 +11,9 @@ class ProductControler {
         }        
         try {
             const Product = mongoose.model('Product', ProductSchema)
+            
             const products = await Product.find().skip(pageOptions.limit*pageOptions.page).limit(pageOptions.limit).exec()
+            
             return res.json(products)
         } catch (error) {
             return res.json(error)
@@ -21,8 +23,10 @@ class ProductControler {
     async getOneProduct(req, res) {
         try {
             const { id } = req.params
+            
             const Product = mongoose.model('Product', ProductSchema)
             const product = await Product.findByIdAndUpdate(id,{$inc:{views:1}},{returnDocument:'after'})
+            
             return res.json(product)
         } catch (error) {
             return res.json(error)
@@ -82,6 +86,22 @@ class ProductControler {
         const Product = mongoose.model('Product', ProductSchema)
         await Product.findByIdAndDelete(id)
         return res.json('Продукт видалений успішно')
+    }
+
+    async searchProduct(req,res){
+        try {
+        const {searchText}=req.body
+        const Product=mongoose.model('Product',ProductSchema)
+        const products= await Product.find({title:{$regex:searchText,$options:'i'}})
+        if(products.length==0){
+            return res.json('За вашим запитом нічого не знайдено')
+        }
+        return res.json(products)
+        } catch (error) {
+            return res.status(500).send(error)
+        }
+        
+        
     }
 
 }

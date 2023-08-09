@@ -64,10 +64,9 @@ class AuthControler {
             return res.json('Такий юзер є в системі')
         }
         const doc =  new User({role:'user',email,fullname,password:passwordHash})
-        await sendMail(email,doc.id)
+        await sendMail(email,`http://localhost:5000/auth/active/${doc._id}`)
         const {password:password1,...userData}  = doc._doc
         
-
         await doc.save()
         const token=jwt.sign({id:userData._id},'secretKey12345',{expiresIn:'24h'})
         await res.setHeader('Autorization', token);
@@ -75,7 +74,22 @@ class AuthControler {
         
     }
 
-
+    async activeEmail(req,res){
+        try {
+        const id=req.params.link
+        const User =  mongoose.model('User' , UserSchema)
+        let  user= await User.findOne({_id:id})
+        if(!user){
+            return res.json('Неправильна силка активації')
+        }
+        user.isActiveted=true
+        await user.save()
+        res.redirect('https://rozetka.com.ua/') 
+        } catch (error) {
+            return res.json(error)
+        }
+        
+    }
 }
 
 
